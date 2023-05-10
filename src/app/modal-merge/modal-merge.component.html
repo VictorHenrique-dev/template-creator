@@ -1,0 +1,15 @@
+<mat-dialog-content [formGroup]="form">
+    <mat-form-field appearance="fill">
+        <mat-label>campo</mat-label>
+        <mat-select formControlName="selectedValue"  [(value)]="selectedValue" name="selectedValue">
+          <mat-option *ngFor="let item of listaDados,let i = index;" [value]="i">
+            {{item.valor.textos[0].referencia_dado}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+  </mat-dialog-content>
+  
+  <mat-dialog-actions>
+      <button class="margin mat-raised-button" style="margin: 5px;" (click)="close()">Close</button>
+      <button class=" margin mat-raised-button mat-primary"  style="margin: 5px;" (click)="save()">Merge</button>
+  </mat-dialog-actions>

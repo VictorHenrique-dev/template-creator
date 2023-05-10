@@ -1,0 +1,74 @@
+<label for="inputDadosVariaveis">dadosVariaveis: </label>
+<input id="inputDadosVariaveis" type="text" [formControl]="inputDadosVariaveis">
+
+<label for="inputTitulo">Titulo: </label>
+<input id="inputTitulo" type="text" [formControl]="inputTitulo">
+
+<label for="inputTamanhoFonte">Tamanho Fonte: </label>
+<input id="inputTamanhoFonte" type="text" [formControl]="inputTamanhoFonte">
+
+<label for="codComprovante">Cod Comprovante: </label>
+<input id="codComprovante" type="text" [formControl]="codComprovante">
+
+<button (click)="submit()" class="btn btn-primary">
+    Submit</button>
+<div class="example-container">
+    <div class="col-6">
+        <div cdkDropListGroup>
+
+            <h2>Dados Variaveis</h2>
+
+
+            <button mat-icon-button (click)="criarNovo()" class="example-icon favorite-icon"
+                aria-label="Example icon-button with heart icon">
+                <mat-icon>note_add</mat-icon>
+            </button>
+            <div cdkDropList [cdkDropListData]="dadosVariaveis" class="example-list"
+                (cdkDropListDropped)="drop($event)">
+                <div class="example-box" *ngFor="let campo of dadosVariaveis, let i = index" cdkDrag>
+                    <div (click)="openModal(campo, i)" class="col-4" style="margin: 10px;">titulo
+                        <strong>{{campo.titulo.texto || 'titulo'}}</strong>
+                    </div>
+                    <div (click)="openModal(campo, i)" class="col-4" style="margin: 10px;">mensagem
+                        <strong>{{campo.valor.mensagem || 'mensagem'}}</strong>
+                    </div>
+                    <div *ngIf="campo.valor.textos[0]">
+                        <div (click)="openModal(campo, i)" class="col-4" style="margin: 10px;">nome_campo
+                            <strong>{{campo.valor.textos[0].referencia_dado || 'referencia_dado' }}</strong><br><strong
+                                *ngIf="campo.valor.textos[1]">{{campo.valor.textos[1].referencia_dado || ''
+                                }}</strong><br><strong
+                                *ngIf="campo.valor.textos[2]">{{campo.valor.textos[2].referencia_dado || '' }}</strong>
+                        </div>
+                        <div (click)="openModal(campo, i)" class="col-4" style="margin: 10px;">nome_campo
+                            <strong>{{campo.valor.textos[0].tipo_dado || 'tipo_dado' }}</strong><br><strong
+                                *ngIf="campo.valor.textos[1]">{{campo.valor.textos[1].tipo_dado || ''
+                                }}</strong><br><strong *ngIf="campo.valor.textos[2]">{{campo.valor.textos[2].tipo_dado
+                                || '' }}</strong>
+                        </div>
+                    </div>
+                    <div (click)="openModal(campo, i)" class="col-4">conteudo_campo <strong>{{campo.conteudo_campo ||
+                            'conteudo_campo'}}</strong> </div>
+                    <mat-toolbar style="margin-left: 50px;">
+                        <button (click)="duplicar(campo)" style="margin: 5px;" mat-icon-button
+                            class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+                            <mat-icon>control_point</mat-icon>
+                        </button>
+                        <button (click)="openModalMerge(campo, i)" style="margin: 5px;" mat-icon-button
+                            class="example-icon" aria-label="Example icon-button with share icon">
+                            <mat-icon>call_merge</mat-icon>
+                        </button>
+                    </mat-toolbar>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-6">
+        <button (click)="format()" class="btn btn-primary">
+            Formatar</button>
+        <br><a class="btn btn-clear" title="Download JSON" [href]="downloadJsonHref" [download]="getDownloadName()">Download</a>
+<br>
+        <ngx-json-viewer *ngIf="flagAttJson" [json]="getJson()"></ngx-json-viewer>
+        <ngx-json-viewer *ngIf="!flagAttJson" [json]="getJson()"></ngx-json-viewer>
+    </div>
+</div>

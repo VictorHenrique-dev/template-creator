@@ -1,0 +1,58 @@
+<h2>
+  {{nome_campo}}
+</h2><mat-dialog-content [formGroup]="form">
+    <mat-form-field>
+        <input matInput
+                placeholder="Titulo Campo"
+               formControlName="tituloTexto" [ngModel]="tituloTexto"> 
+    </mat-form-field><br>
+    <mat-form-field>
+      <input matInput
+              placeholder="Mensagem"
+             formControlName="mensagem" [ngModel]="mensagem"> 
+  </mat-form-field><br>
+  <mat-form-field>
+    <input matInput
+            placeholder="Espacamento"
+           formControlName="espacamento" [ngModel]="espacamento"> 
+</mat-form-field><br>
+<mat-radio-group formControlName="posicao_dado_comprovante" aria-label="posicao_dado_comprovante" [(ngModel)]="posicao_dado_comprovante">
+  <mat-radio-button value="V" checked="true">Variavel</mat-radio-button>
+  <mat-radio-button value="F">Fixo</mat-radio-button>
+</mat-radio-group>
+<br>
+<mat-form-field *ngIf="posicao_dado_comprovante == 'F'">
+  <input matInput
+          placeholder="nome campo fixo"
+         formControlName="nome_campo" [ngModel]="nome_campo"> 
+</mat-form-field>
+<mat-form-field *ngIf="posicao_dado_comprovante == 'F'">
+<input matInput
+placeholder="conteudo campo fixo"
+formControlName="conteudo_campo" [ngModel]="conteudo_campo"> 
+</mat-form-field>
+<br><br>
+<mat-form-field appearance="fill" >
+  <mat-label>Tipo dado</mat-label> 
+  <mat-select formControlName="tipo_dado" [ngModel]="tipo_dado">
+    <mat-option value="TEXTO">TEXTO</mat-option>
+    <mat-option value="DATA">DATA</mat-option>
+    <mat-option value="DECIMAL">DECIMAL</mat-option>
+    <mat-option value="CFP_CNPJ">CFP_CNPJ</mat-option>
+  </mat-select>
+</mat-form-field>
+<br>
+<mat-form-field appearance="fill" >
+  <mat-label>orientacao_exibicao</mat-label> 
+  <mat-select formControlName="orientacao_exibicao" [ngModel]="orientacao_exibicao">
+    <mat-option value="V">Vertical</mat-option>
+    <mat-option value="H">Horizontal</mat-option>
+    <mat-option value="C">Continuo</mat-option>
+  </mat-select>
+</mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button class="margin mat-raised-button"(click)="close()">Close</button>
+    <button class=" margin mat-raised-button mat-primary"(click)="save()">Save</button>
+</mat-dialog-actions>
