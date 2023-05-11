@@ -31,7 +31,7 @@ export class ModalComponentComponent implements OnInit {
   }
   ngOnInit(): void {
     this.form = this.fb.group({
-      tituloTexto: [this.tituloTexto, Validators.required],
+      tituloTexto: [this.tituloTexto, []],
       mensagem: [this.mensagem, []],
       posicao_dado_comprovante: [this.posicao_dado_comprovante, []],
       espacamento: [this.espacamento, []],
@@ -52,9 +52,7 @@ export class ModalComponentComponent implements OnInit {
   }
 
   save() {
-    if (this.form.valid) {
       this.dialogRef.close(this.form.value);
-    }
   }
 
   close() {

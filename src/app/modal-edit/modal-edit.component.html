@@ -1,0 +1,12 @@
+<mat-dialog-content>
+
+<mat-selection-list [multiple]="false" #selecionados>
+    <mat-list-option *ngFor="let item of listaDados,let i = index; " (click)="deleteItem(i, item)">{{item.referencia_dado}}
+    </mat-list-option>
+  </mat-selection-list>
+  </mat-dialog-content>
+  
+  <mat-dialog-actions>
+    <button class="margin mat-raised-button" style="margin: 5px;" (click)="finish()">Apagar</button>
+    <button class="margin mat-raised-button" style="margin: 5px;" (click)="close()">Fechar</button>
+</mat-dialog-actions>

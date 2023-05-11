@@ -21,14 +21,14 @@
   <mat-radio-button value="F">Fixo</mat-radio-button>
 </mat-radio-group>
 <br>
-<mat-form-field *ngIf="posicao_dado_comprovante == 'F'">
+<mat-form-field>
   <input matInput
-          placeholder="nome campo fixo"
+          placeholder="nome campo"
          formControlName="nome_campo" [ngModel]="nome_campo"> 
 </mat-form-field>
-<mat-form-field *ngIf="posicao_dado_comprovante == 'F'">
+<mat-form-field>
 <input matInput
-placeholder="conteudo campo fixo"
+placeholder="conteudo campo"
 formControlName="conteudo_campo" [ngModel]="conteudo_campo"> 
 </mat-form-field>
 <br><br>

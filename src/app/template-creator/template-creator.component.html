@@ -18,7 +18,6 @@
 
             <h2>Dados Variaveis</h2>
 
-
             <button mat-icon-button (click)="criarNovo()" class="example-icon favorite-icon"
                 aria-label="Example icon-button with heart icon">
                 <mat-icon>note_add</mat-icon>
@@ -32,20 +31,27 @@
                     <div (click)="openModal(campo, i)" class="col-4" style="margin: 10px;">mensagem
                         <strong>{{campo.valor.mensagem || 'mensagem'}}</strong>
                     </div>
-                    <div *ngIf="campo.valor.textos[0]">
-                        <div (click)="openModal(campo, i)" class="col-4" style="margin: 10px;">nome_campo
-                            <strong>{{campo.valor.textos[0].referencia_dado || 'referencia_dado' }}</strong><br><strong
-                                *ngIf="campo.valor.textos[1]">{{campo.valor.textos[1].referencia_dado || ''
-                                }}</strong><br><strong
-                                *ngIf="campo.valor.textos[2]">{{campo.valor.textos[2].referencia_dado || '' }}</strong>
+
+                    <div>
+                        <p>nome_campo</p>
+                        <div class="example-box-h" *ngFor="let campo of campo.valor.textos">
+                            <div (click)="openModalDelete(campo, i)" style="margin: 10px;">
+                                <strong>{{campo.referencia_dado || 'referencia_dado'}}</strong>
+                                <br>
+                            </div>
+
                         </div>
-                        <div (click)="openModal(campo, i)" class="col-4" style="margin: 10px;">nome_campo
+                        <!-- <div (click)="openModal(campo, i)" class="col-4" style="margin: 10px;">nome_campo
                             <strong>{{campo.valor.textos[0].tipo_dado || 'tipo_dado' }}</strong><br><strong
                                 *ngIf="campo.valor.textos[1]">{{campo.valor.textos[1].tipo_dado || ''
                                 }}</strong><br><strong *ngIf="campo.valor.textos[2]">{{campo.valor.textos[2].tipo_dado
                                 || '' }}</strong>
-                        </div>
+                        </div> -->
                     </div>
+
+
+
+
                     <div (click)="openModal(campo, i)" class="col-4">conteudo_campo <strong>{{campo.conteudo_campo ||
                             'conteudo_campo'}}</strong> </div>
                     <mat-toolbar style="margin-left: 50px;">
@@ -66,8 +72,9 @@
     <div class="col-6">
         <button (click)="format()" class="btn btn-primary">
             Formatar</button>
-        <br><a class="btn btn-clear" title="Download JSON" [href]="downloadJsonHref" [download]="getDownloadName()">Download</a>
-<br>
+        <br><a class="btn btn-clear" title="Download JSON" [href]="downloadJsonHref"
+            [download]="getDownloadName()">Download</a>
+        <br>
         <ngx-json-viewer *ngIf="flagAttJson" [json]="getJson()"></ngx-json-viewer>
         <ngx-json-viewer *ngIf="!flagAttJson" [json]="getJson()"></ngx-json-viewer>
     </div>

@@ -17,14 +17,17 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { ModalMergeComponent } from './modal-merge/modal-merge.component';
 import { FormsModule } from '@angular/forms';
-import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { ModalEditComponent } from './modal-edit/modal-edit.component';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   declarations: [
     AppComponent,
     TemplateCreadorComponent,
     ModalComponentComponent,
-    ModalMergeComponent
+    ModalMergeComponent,
+    ModalEditComponent
   ],
   imports: [
     BrowserModule,
@@ -40,7 +43,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     MatToolbarModule,
     MatIconModule,
     FormsModule,
-    MatCheckboxModule
+    MatCheckboxModule, 
+    MatListModule
   ],
   providers: [],
   bootstrap: [AppComponent]

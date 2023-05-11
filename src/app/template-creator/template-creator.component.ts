@@ -10,6 +10,7 @@ import { ModalComponentComponent } from '../modal-component/modal-component.comp
 import { TextoModel } from '../model/texto.model';
 import { ModalMergeComponent } from '../modal-merge/modal-merge.component';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { ModalEditComponent } from '../modal-edit/modal-edit.component';
 
 interface TipagemDadosVariaveis {
   nome_campo: any;
@@ -41,6 +42,7 @@ export class TemplateCreadorComponent implements OnInit {
   constructor(public dialog: MatDialog, private sanitizer: DomSanitizer) { }
 
   ngOnInit(): void {
+    this.submit();
   }
 
   drop(event: CdkDragDrop<string[]>) {
@@ -51,8 +53,6 @@ export class TemplateCreadorComponent implements OnInit {
         event.currentIndex);
       this.atualizarTemplate();
     } else {
-      console.log(event.previousContainer.data)
-      console.log(event.container.data)
       transferArrayItem(
         event.previousContainer.data,
         event.container.data,
@@ -65,13 +65,23 @@ export class TemplateCreadorComponent implements OnInit {
 
   submit() {
     this.dadosVariaveis = [];
-    let obj: TipagemDadosVariaveis[] = JSON.parse(this.inputDadosVariaveis.value);
-    // let obj: Tipagem[] = JSON.parse('[{"nome_campo":"NPRPTCNTR","nome_campo_legado":"NPRPTCNTR","conteudo_campo":"1234567"},{"nome_campo":"data_contratacao","nome_campo_legado":"data_contratacao","conteudo_campo":"2020-09-14T00:00:00"},{"nome_campo":"NIDEFMOVICANM","nome_campo_legado":"NIDEFMOVICANM","conteudo_campo":"OUTROS"},{"nome_campo":"MTITU","nome_campo_legado":"MTITU","conteudo_campo":"ANTONIO COUTINHO"}]');
+    // let obj: TipagemDadosVariaveis[] = JSON.parse(this.inputDadosVariaveis.value);
+    let obj: TipagemDadosVariaveis[] = JSON.parse('[{"nome_campo":"NPRPTCNTR","nome_campo_legado":"NPRPTCNTR","conteudo_campo":"1234567"},{"nome_campo":"data_contratacao","nome_campo_legado":"data_contratacao","conteudo_campo":"2020-09-14T00:00:00"},{"nome_campo":"NIDEFMOVICANM","nome_campo_legado":"NIDEFMOVICANM","conteudo_campo":"OUTROS"},{"nome_campo":"MTITU","nome_campo_legado":"MTITU","conteudo_campo":"ANTONIO COUTINHO"}]');
+
+    let itemDataComprovante = new ItemModel('1', new TituloModel(false, '', "14"), new ValorModel(' em {0} às {1} via {2} com {3}',
+      [
+        { posicao_dado_comprovante: 'F', tipo_dado: 'DATA', formatos_dado: [("dd/mm/yyyy")], referencia_dado: 'identificacao.data_real_operacao' },
+        { posicao_dado_comprovante: 'F', tipo_dado: 'HORAS', formatos_dado: [("hh:mm:ss")], referencia_dado: 'identificacao.hora_real_operacao' },
+        { posicao_dado_comprovante: 'F', tipo_dado: 'TEXTO', formatos_dado: null, referencia_dado: 'canal_origem_operacao.nome_canal' },
+        { posicao_dado_comprovante: 'V', tipo_dado: 'TEXTO', formatos_dado: null, referencia_dado: 'meio_formalizacao' },
+      ]
+    ), '', false, "V");
+
+    this.dadosVariaveis.push(itemDataComprovante);
 
     obj.forEach(function (value) {
       let itemAux = new ItemModel('', new TituloModel(false, '', "16"), new ValorModel('{0}', [{ posicao_dado_comprovante: 'V', tipo_dado: null, formatos_dado: null, referencia_dado: value.nome_campo }]), value.conteudo_campo, false, "V");
       this.dadosVariaveis.push(itemAux);
-      console.log(itemAux)
     }.bind(this))
 
     this.templatePronto.titulo.texto = this.inputTitulo.value;
@@ -85,13 +95,13 @@ export class TemplateCreadorComponent implements OnInit {
     this.dadosVariaveis.forEach(function (d, index) {
       Object.keys(d).forEach(key => {
         // d.conteudo_campo = null;
-        console.log(d.exibir_item_valor_vazio)
         if (d[key] == null || d[key] == '' || d[key] == undefined
         ) delete d[key];
-        if (!d.valor.textos[0].referencia_dado) {
-          delete d.valor.textos[0].referencia_dado;
-          delete d.valor.textos[0].posicao_dado_comprovante;
-          delete d.valor.textos[0].tipo_dado;
+        if (!d.valor.textos[0].formatos_dado) {
+          //   delete d.valor.textos[0].referencia_dado;
+          //   delete d.valor.textos[0].posicao_dado_comprovante;
+          //   delete d.valor.textos[0].tipo_dado;
+          delete d.valor.textos[0].formatos_dado
         }
         if (d.valor.textos[0]) {
           if (d.valor.textos[0].formatos_dado == null) delete d.valor.textos[0].formatos_dado
@@ -101,6 +111,7 @@ export class TemplateCreadorComponent implements OnInit {
     });
     this.templatePronto.itens = this.dadosVariaveis;
     this.flagAttJson = !this.flagAttJson;
+    console.log(this.dadosVariaveis);
   }
 
 
@@ -119,8 +130,6 @@ export class TemplateCreadorComponent implements OnInit {
       }
     });
     dialogRef.afterClosed().subscribe(result => {
-      console.log("result")
-      console.log(result)
       this.dadosVariaveis.forEach(function (value, i) {
         if (i == index) {
           if (result.espacamento == '' || result.espacamento == null) {
@@ -134,6 +143,8 @@ export class TemplateCreadorComponent implements OnInit {
           value.valor.textos[0].tipo_dado = result.tipo_dado;
 
           if (result.tipo_dado == 'DATA') {
+            value.valor.textos[0].formatos_dado = [("dd/mm/yyyy")];
+          } else if (result.tipo_dado == 'HORAS') {
             value.valor.textos[0].formatos_dado = [("hh:mm:ss")];
           } else {
             value.valor.textos[0].formatos_dado = null;
@@ -162,6 +173,28 @@ export class TemplateCreadorComponent implements OnInit {
       let indexSelected = result.selectedValue;
       this.dadosVariaveis[index].valor.textos.push(this.dadosVariaveis[indexSelected].valor.textos[0]);
       this.dadosVariaveis.splice(indexSelected, 1);
+      this.atualizarTemplate();
+    })
+  };
+
+  openModalDelete(campo: any, index: any) {
+    const dialogRef = this.dialog.open(ModalEditComponent, {
+      width: '450px',
+      data: {
+        textos: this.dadosVariaveis[index].valor.textos
+      }
+    });
+
+    dialogRef.keydownEvents().subscribe(e => {
+      if (e.keyCode === 27) {
+        e.preventDefault();
+        dialogRef.disableClose = false;
+      }
+    });
+
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.dadosVariaveis[index].valor.textos.splice(this.dadosVariaveis[index].valor.textos.findIndex(e => e.referencia_dado == result.selectedValue), 1);
       this.atualizarTemplate();
     })
   };
@@ -195,19 +228,17 @@ export class TemplateCreadorComponent implements OnInit {
 
       Object.keys(d).forEach(key => {
         d.conteudo_campo = null;
-        console.log(d);
         if (!d.valor.textos[0]) {
-         delete d.valor.textos
+          delete d.valor.textos
         }
         if (d[key] == null || d[key] == '' || d[key] == undefined
         ) delete d[key];
       });
     });
     this.templatePronto.itens = this.listaAuxiliar;
-    
-    
+
+
     var printJSON = JSON.stringify(this.templatePronto);
-    console.log(printJSON);
     var uri = this.sanitizer.bypassSecurityTrustUrl("data:text/json;charset=UTF-8," + encodeURIComponent(printJSON));
     this.downloadJsonHref = uri;
     this.flagAttJson = !this.flagAttJson;
