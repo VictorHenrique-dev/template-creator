@@ -42,7 +42,7 @@ export class TemplateCreadorComponent implements OnInit {
   constructor(public dialog: MatDialog, private sanitizer: DomSanitizer) { }
 
   ngOnInit(): void {
-    this.submit();
+    // this.submit();
   }
 
   drop(event: CdkDragDrop<string[]>) {
@@ -65,8 +65,8 @@ export class TemplateCreadorComponent implements OnInit {
 
   submit() {
     this.dadosVariaveis = [];
-    // let obj: TipagemDadosVariaveis[] = JSON.parse(this.inputDadosVariaveis.value);
-    let obj: TipagemDadosVariaveis[] = JSON.parse('[{"nome_campo":"NPRPTCNTR","nome_campo_legado":"NPRPTCNTR","conteudo_campo":"1234567"},{"nome_campo":"data_contratacao","nome_campo_legado":"data_contratacao","conteudo_campo":"2020-09-14T00:00:00"},{"nome_campo":"NIDEFMOVICANM","nome_campo_legado":"NIDEFMOVICANM","conteudo_campo":"OUTROS"},{"nome_campo":"MTITU","nome_campo_legado":"MTITU","conteudo_campo":"ANTONIO COUTINHO"}]');
+    let obj: TipagemDadosVariaveis[] = JSON.parse(this.inputDadosVariaveis.value);
+    // let obj: TipagemDadosVariaveis[] = JSON.parse('[{"nome_campo":"NPRPTCNTR","nome_campo_legado":"NPRPTCNTR","conteudo_campo":"1234567"},{"nome_campo":"data_contratacao","nome_campo_legado":"data_contratacao","conteudo_campo":"2020-09-14T00:00:00"},{"nome_campo":"NIDEFMOVICANM","nome_campo_legado":"NIDEFMOVICANM","conteudo_campo":"OUTROS"},{"nome_campo":"MTITU","nome_campo_legado":"MTITU","conteudo_campo":"ANTONIO COUTINHO"}]');
 
     let itemDataComprovante = new ItemModel('1', new TituloModel(false, '', 14), new ValorModel(' em {0} às {1} via {2} com {3}',
       [
