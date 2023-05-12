@@ -30,7 +30,7 @@ export class TemplateCreadorComponent implements OnInit {
   flagAttJson: boolean;
 
   listaAuxiliar: ItemModel[] = [];
-  templatePronto: TemplateModel = new TemplateModel(new TituloModel(true, "titulo", "24"));;
+  templatePronto: TemplateModel = new TemplateModel(new TituloModel(true, "titulo", 24));;
 
   inputDadosVariaveis = new FormControl('');
   inputTitulo = new FormControl('');
@@ -68,7 +68,7 @@ export class TemplateCreadorComponent implements OnInit {
     // let obj: TipagemDadosVariaveis[] = JSON.parse(this.inputDadosVariaveis.value);
     let obj: TipagemDadosVariaveis[] = JSON.parse('[{"nome_campo":"NPRPTCNTR","nome_campo_legado":"NPRPTCNTR","conteudo_campo":"1234567"},{"nome_campo":"data_contratacao","nome_campo_legado":"data_contratacao","conteudo_campo":"2020-09-14T00:00:00"},{"nome_campo":"NIDEFMOVICANM","nome_campo_legado":"NIDEFMOVICANM","conteudo_campo":"OUTROS"},{"nome_campo":"MTITU","nome_campo_legado":"MTITU","conteudo_campo":"ANTONIO COUTINHO"}]');
 
-    let itemDataComprovante = new ItemModel('1', new TituloModel(false, '', "14"), new ValorModel(' em {0} às {1} via {2} com {3}',
+    let itemDataComprovante = new ItemModel('1', new TituloModel(false, '', 14), new ValorModel(' em {0} às {1} via {2} com {3}',
       [
         { posicao_dado_comprovante: 'F', tipo_dado: 'DATA', formatos_dado: [("dd/mm/yyyy")], referencia_dado: 'identificacao.data_real_operacao' },
         { posicao_dado_comprovante: 'F', tipo_dado: 'HORAS', formatos_dado: [("hh:mm:ss")], referencia_dado: 'identificacao.hora_real_operacao' },
@@ -77,13 +77,21 @@ export class TemplateCreadorComponent implements OnInit {
       ]
     ), '', false, "V");
 
-    this.dadosVariaveis.push(itemDataComprovante);
+    let itemAutenticacaoComprovante = new ItemModel('1', new TituloModel(false, 'Autenticação:', 14), new ValorModel('{0}',
+    [
+      { posicao_dado_comprovante: 'F', tipo_dado: 'TEXTO', formatos_dado: null, referencia_dado: 'identificacao.numero_autenticacao_comprovante' },
+    ]
+  ), '', false, "V");
 
-    obj.forEach(function (value) {
-      let itemAux = new ItemModel('', new TituloModel(false, '', "16"), new ValorModel('{0}', [{ posicao_dado_comprovante: 'V', tipo_dado: null, formatos_dado: null, referencia_dado: value.nome_campo }]), value.conteudo_campo, false, "V");
-      this.dadosVariaveis.push(itemAux);
-    }.bind(this))
+  this.dadosVariaveis.push(itemDataComprovante);
+  
+  obj.forEach(function (value) {
+    let itemAux = new ItemModel('', new TituloModel(false, '', 16), new ValorModel('{0}', [{ posicao_dado_comprovante: 'V', tipo_dado: null, formatos_dado: null, referencia_dado: value.nome_campo }]), value.conteudo_campo, false, "V");
+    this.dadosVariaveis.push(itemAux);
+  }.bind(this))
 
+  this.dadosVariaveis.push(itemAutenticacaoComprovante);
+  
     this.templatePronto.titulo.texto = this.inputTitulo.value;
     this.templatePronto.titulo.tamanho_fonte = this.inputTamanhoFonte.value;
     this.atualizarTemplate();
@@ -204,11 +212,14 @@ export class TemplateCreadorComponent implements OnInit {
   }
 
   getDownloadName() {
-    return `${this.codComprovante.value}.json`
+    if (this.codComprovante.value) {
+      return `${this.codComprovante.value}.json`
+    }
+    return 'template.json'
   }
 
   criarNovo() {
-    let itemAux = new ItemModel('', new TituloModel(true, '', "16"), new ValorModel('{0}',
+    let itemAux = new ItemModel('', new TituloModel(true, '', 16), new ValorModel('{0}',
       [{ formatos_dado: null, posicao_dado_comprovante: null, referencia_dado: null, tipo_dado: null }]
     ), null, false, "V");
     this.dadosVariaveis.push(itemAux);
@@ -223,18 +234,30 @@ export class TemplateCreadorComponent implements OnInit {
 
   format() {
     this.listaAuxiliar = this.dadosVariaveis;
-    this.listaAuxiliar.forEach(function (d, index) {
-      // d => 
+    // this.listaAuxiliar.forEach(function (d, index) {
+    //   // d => 
 
-      Object.keys(d).forEach(key => {
-        d.conteudo_campo = null;
-        if (!d.valor.textos[0]) {
-          delete d.valor.textos
-        }
-        if (d[key] == null || d[key] == '' || d[key] == undefined
-        ) delete d[key];
-      });
-    });
+    //   Object.keys(d).forEach(key => {
+    //     delete d.conteudo_campo;
+    //     // if (!d.valor.textos[0]) {
+    //     //   delete d.valor.textos
+    //     // }
+    //     // if (typeof d[key].textos !== 'undefined') {
+    //     //   console.log("d[key].textos")
+    //     // }
+    //     // if (d[key] == null || d[key] == '' || typeof d[key] == undefined) delete d[key];
+    //     // console.log(d[key])
+    //     console.log(d[key].textos)
+
+
+    //   });
+    // });
+
+    console.log(JSON.stringify(this.listaAuxiliar
+))
+    this.listaAuxiliar = this.removeNull(this.listaAuxiliar);
+    console.log(this.listaAuxiliar)
+
     this.templatePronto.itens = this.listaAuxiliar;
 
 
@@ -243,6 +266,29 @@ export class TemplateCreadorComponent implements OnInit {
     this.downloadJsonHref = uri;
     this.flagAttJson = !this.flagAttJson;
   }
+
+  deleteItem(campo: any, index: any) {
+    this.dadosVariaveis.splice(index,1);
+    this.atualizarTemplate();
+  }
+
+  removeNull(obj) {
+  //   return Object.fromEntries(
+  //     Object.entries(obj)
+  //       .filter(([_, value]) => value != null)
+  //       .map(([key, value]) => [
+  //         key,
+  //         value === Object(value) ? this.removeNull(value) : value,
+  //       ]),
+  //   );
+  // }
+
+  
+  return JSON.parse(JSON.stringify(obj, (key, value) => {
+      return (value === null ? undefined : value);
+    }));
+  };
+   
 }
 
 

@@ -8,7 +8,7 @@ export class ValorModel {
         ) {
             this.cor_fonte = "#000000";
             this.acessibilidade = 'text';
-            this.tamanho_fonte = '16';
+            this.tamanho_fonte = 16;
             this.negrito = false;
             this.mensagem = mensagem;
             this.textos = textos
@@ -16,7 +16,7 @@ export class ValorModel {
 
     negrito: boolean;
     cor_fonte: string;
-    tamanho_fonte: string;
+    tamanho_fonte: number;
     acessibilidade: string = 'text';
     textos?: TextoModel[];
     mensagem?: string;

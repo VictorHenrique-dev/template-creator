@@ -1,18 +1,33 @@
-<label for="inputDadosVariaveis">dadosVariaveis: </label>
-<input id="inputDadosVariaveis" type="text" [formControl]="inputDadosVariaveis">
+    <mat-form-field class="form-item">
+        <mat-label>Dados Variaveis:</mat-label>
+        <input matInput value="inputDadosVariaveis" id="inputDadosVariaveis" type="text" [formControl]="inputDadosVariaveis">
+      </mat-form-field>
 
-<label for="inputTitulo">Titulo: </label>
-<input id="inputTitulo" type="text" [formControl]="inputTitulo">
+      <mat-form-field class="form-item">
+        <mat-label>Titulo:</mat-label>
+        <input matInput value="inputTitulo" id="inputTitulo" type="text" [formControl]="inputTitulo">
+      </mat-form-field>
 
-<label for="inputTamanhoFonte">Tamanho Fonte: </label>
-<input id="inputTamanhoFonte" type="text" [formControl]="inputTamanhoFonte">
+      <mat-form-field class="form-item">
+        <mat-label>Tamanho Fonte:</mat-label>
+        <input matInput value="inputTamanhoFonte" id="inputTamanhoFonte" type="text" [formControl]="inputTamanhoFonte">
+      </mat-form-field>
 
-<label for="codComprovante">Cod Comprovante: </label>
-<input id="codComprovante" type="text" [formControl]="codComprovante">
+      <mat-form-field class="form-item">
+        <mat-label>Cod Comprovante:</mat-label>
+        <input matInput value="codComprovante" id="codComprovante" type="text" [formControl]="codComprovante">
+      </mat-form-field>
+    
+    <button mat-raised-button color="primary" (click)="submit()" class="form-item btn btn-primary">
+        Submit</button>
 
-<button (click)="submit()" class="btn btn-primary">
-    Submit</button>
-<div class="example-container">
+        <button id="button-format" mat-raised-button color="accent" (click)="format()">
+            Formatar</button>
+        <a mat-raised-button color="warn" title="Download JSON" [href]="downloadJsonHref"
+            [download]="getDownloadName()">Download</a>
+
+
+    <div class="example-container">
     <div class="col-6">
         <div cdkDropListGroup>
 
@@ -41,40 +56,33 @@
                             </div>
 
                         </div>
-                        <!-- <div (click)="openModal(campo, i)" class="col-4" style="margin: 10px;">nome_campo
-                            <strong>{{campo.valor.textos[0].tipo_dado || 'tipo_dado' }}</strong><br><strong
-                                *ngIf="campo.valor.textos[1]">{{campo.valor.textos[1].tipo_dado || ''
-                                }}</strong><br><strong *ngIf="campo.valor.textos[2]">{{campo.valor.textos[2].tipo_dado
-                                || '' }}</strong>
-                        </div> -->
                     </div>
-
-
-
-
                     <div (click)="openModal(campo, i)" class="col-4">conteudo_campo <strong>{{campo.conteudo_campo ||
                             'conteudo_campo'}}</strong> </div>
-                    <mat-toolbar style="margin-left: 50px;">
-                        <button (click)="duplicar(campo)" style="margin: 5px;" mat-icon-button
-                            class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+
+
+                    <mat-toolbar color="link" style="margin-left: 50px; width: 200px;">
+                        <button color="primary" (click)="duplicar(campo)" style="margin: 5px;" mat-icon-button>
                             <mat-icon>control_point</mat-icon>
                         </button>
-                        <button (click)="openModalMerge(campo, i)" style="margin: 5px;" mat-icon-button
-                            class="example-icon" aria-label="Example icon-button with share icon">
+                        <button color="accent" (click)="openModalMerge(campo, i)" style="margin: 5px;" mat-icon-button
+                    >
                             <mat-icon>call_merge</mat-icon>
                         </button>
+                        <button color="warn" (click)="deleteItem(campo, i)" style="margin: 5px;" mat-icon-button 
+                            >
+                            <mat-icon>delete</mat-icon>
+                        </button>
                     </mat-toolbar>
+
+                    
                 </div>
             </div>
 
         </div>
     </div>
-    <div class="col-6">
-        <button (click)="format()" class="btn btn-primary">
-            Formatar</button>
-        <br><a class="btn btn-clear" title="Download JSON" [href]="downloadJsonHref"
-            [download]="getDownloadName()">Download</a>
-        <br>
+    
+    <div class="col-6" style="margin-left: 10px;">
         <ngx-json-viewer *ngIf="flagAttJson" [json]="getJson()"></ngx-json-viewer>
         <ngx-json-viewer *ngIf="!flagAttJson" [json]="getJson()"></ngx-json-viewer>
     </div>

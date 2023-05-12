@@ -20,6 +20,7 @@ import { FormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ModalEditComponent } from './modal-edit/modal-edit.component';
 import { MatListModule } from '@angular/material/list';
+import {MatButtonModule} from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { MatListModule } from '@angular/material/list';
     MatIconModule,
     FormsModule,
     MatCheckboxModule, 
-    MatListModule
+    MatListModule,
+    MatButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]
